@@ -1,5 +1,5 @@
 ##JSONDevice
-This module has been derived from the [XMLDevice]https://github.com/pz1/ZWayModules/tree/master/XMLDevice module.
+This module has been derived from the [XMLDevice](https://github.com/pz1/ZWayModules/tree/master/XMLDevice) module.
 
 It is meant to turn a single JSON element into a virtual device.
 
