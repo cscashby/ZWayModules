@@ -5,7 +5,7 @@
     "author": "Christian Ashby",
     "homepage": "https://github.com/cscashby/ZWayModules/tree/master/Tado",
     "icon": "icon.png",
-    "moduleName": "Tado",
+    "moduleName": "TadoDEBUG",
     "version": "0.2.0",
     "maturity": "development",
     "repository": {
@@ -15,48 +15,23 @@
     "defaults": {
         "title": "__m_title__",
         "description": "__m_descr__",
-        "isNumerical": "true",
-        "isFloat": "true",
-        "url": "https://my.tado.com/mobile/1.4/getCurrentState?username=xxx&password=xxx",
-        "jsonPath": "insideTemp",
+        "username": "",
+        "password": "",
         "polling": "5",
-        "probeTitle": "InsideTemp",
-        "scaleTitle": "C",
-        "deviceName": "TadoTemp",
-        "debug": ""
+        "debug": false
     },
     "schema": {
         "type": "object",
         "properties": {
-            "isNumerical": {
-                "type": "boolean",
-                "required": true
-            },
-            "isFloat": {
-                "type": "boolean",
-                "required": true
-            },
-            "url": {
+            "username": {
                 "type": "string",
                 "required": true
             },
-            "jsonPath": {
+            "password": {
                 "type": "string",
                 "required": true
             },
             "polling": {
-                "type": "string",
-                "required": true
-            },
-            "probeTitle": {
-                "type": "string",
-                "required": true
-            },
-            "scaleTitle": {
-                "type": "string",
-                "required": true
-            },
-            "deviceName": {
                 "type": "string",
                 "required": true
             },
@@ -64,36 +39,19 @@
                 "type": "boolean",
                 "required": true
             }
-        },
-        "required": true
+        }
     },
     "options": {
         "fields": {
-            "isNumerical": {
-                "rightLabel": "__isNumerical_Select__",
-                "helper": "__isNumerical_helper__"
+            "username": {
+                "label": "__username__"
             },
-            "isFloat": {
-                "rightLabel": "__isFloat_Select__",
-                "helper": "__isFloat_helper__"
-            },
-            "url": {
-                "label": "__url__"
-            },
-            "jsonPath": {
-                "label": "__jsonPath__"
+            "password": {
+                "label": "__password__"
             },
             "polling": {
-                "label": "__polling__"
-            },
-            "probeTitle": {
-                "label": "__probeTitle__"
-            },
-            "scaleTitle": {
-                "label": "__scaleTitle__"
-            },
-            "deviceName": {
-                "label": "__deviceName__"
+                "label": "__polling__",
+                "helper": "__polling_helper__"
             },
             "debug": {
                 "rightLabel": "__debug__",

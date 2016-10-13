@@ -11,6 +11,8 @@ This module creates a sensorMultilevel or a sensorBinary widget
 
  ******************************************************************************/
 
+TADO_STATE_URL="https://my.tado.com/mobile/1.9/getCurrentState"
+
 // ----------------------------------------------------------------------------
 // --- Class definition, inheritance and setup
 // ----------------------------------------------------------------------------
@@ -77,21 +79,17 @@ Tado.prototype.fetchJSONElement = function (instance) {
     var self = instance,
         moduleName = "Tado",
         langFile = self.controller.loadModuleLang(moduleName),
-        isNumerical = self.config.isNumerical,
-        isFloat = self.config.isFloat,
-        jsonPath = self.config.jsonPath + "text()";
     if (self.config.debug) {
-        console.log("jsonPath: ", self.config.jsonPath);
-        console.log("Url: ", self.config.url);
-        console.log("Float: ", isFloat);
-        console.log("Numerical: ", isNumerical);
-        console.log("Debug: ", self.config.debug);
+        console.log("username: ", self.config.username);
+        console.log("password: XXX");
     }
 
+    stateURL = TADO_STATE_URL + "?username" + self.config.username + "&password=" + self.config.password
     http.request({
-        url: self.config.url,
+        url: stateURL,
         async: true,
         contentType: "text/json",
+        timeout: 10000,
         success: function (res) {
             try {
                 var json = JSON.parse(res.data);
@@ -100,29 +98,19 @@ Tado.prototype.fetchJSONElement = function (instance) {
                         console.log("key: ", i);
                     }
                 }
-                if (isNumerical) {
-                    deviceType = "sensorMultilevel";
-                    if (isFloat) {
-                        level = parseFloat(eval("json." + self.config.jsonPath));
-                    } else {
-                        level = parseInt(eval("json." + self.config.jsonPath));
-                    }
-                } else {
-                    deviceType = "text";
-                    level = eval("json." + self.config.jsonPath);
-                }
-                self.vDev.set("metrics:level", level);
+                //deviceType = "sensorMultilevel";
+                //level = parseFloat(eval("json." + self.config.jsonPath));
+                //self.vDev.set("metrics:level", level);
             } catch (e) {
                 if (self.config.debug) {
                     self.controller.addNotification("error", langFile.err_parse, "module", moduleName);
-                    console.log("jsonPath: ", self.config.jsonPath);
                 }
             }
         },
         error: function () {
             if (self.config.debug) {
                 self.controller.addNotification("error", langFile.err_fetch, "module", moduleName);
-                console.log("URL: ", self.config.url);
+                console.log("URL: ", stateURL);
             }
         }
     });
