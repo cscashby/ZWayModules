@@ -5,8 +5,8 @@
     "author": "Christian Ashby",
     "homepage": "https://github.com/cscashby/ZWayModules/tree/master/Tado",
     "icon": "icon.png",
-    "moduleName": "TadoDEBUG",
-    "version": "0.2.1",
+    "moduleName": "Tado",
+    "version": "0.2.2",
     "maturity": "development",
     "repository": {
         "type": "git",

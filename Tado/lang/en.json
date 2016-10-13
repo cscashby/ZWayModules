@@ -1,5 +1,5 @@
 {
-    "m_title": "Tado DEBUG device",
+    "m_title": "Tado device",
     "m_descr": "Create virtual device mirroring the Tado heating controller.",
     "username": "Tado username",
     "password": "Tado password",
