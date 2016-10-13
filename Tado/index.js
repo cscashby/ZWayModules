@@ -12,6 +12,7 @@ This module creates a sensorMultilevel or a sensorBinary widget
  ******************************************************************************/
 
 TADO_STATE_URL="https://my.tado.com/mobile/1.9/getCurrentState"
+TADO_USERS_URL="https://my.tado.com/mobile/1.6/getAppUsersRelativePositions"
 
 // ----------------------------------------------------------------------------
 // --- Class definition, inheritance and setup
@@ -41,6 +42,7 @@ Tado.prototype.init = function (config) {
             deviceId: "Tado_InsideTemp" + this.id,
             defaults: {
                 deviceType: "sensorMultilevel",
+                probeType: "temperature",
                 metrics: {
                     probeTitle: "Inside Temp",
                     icon: "temperature",
@@ -54,13 +56,32 @@ Tado.prototype.init = function (config) {
                 }
             },
             moduleId: this.id
+        }),
+        "setPointTemp": self.controller.devices.create({
+            deviceId: "Tado_SetPointTemp" + this.id,
+            defaults: {
+                deviceType: "sensorMultilevel",
+                probeType: "temperature",
+                metrics: {
+                    probeTitle: "Set Point Temp",
+                    icon: "temperature",
+                    title: "Tado"
+                }
+            },
+            overlay: {
+                metrics: {
+                    scaleTitle: "C",
+                    title: "Set Temp"
+                }
+            },
+            moduleId: this.id
         })
     };
 
     this.timer = setInterval(function () {
-        self.fetchJSONElement(self);
+        self.getData(self);
     }, self.config.polling * 60 * 1000);
-    self.fetchJSONElement(self);
+    self.getData(self);
 };
 
 Tado.prototype.stop = function () {
@@ -81,7 +102,31 @@ Tado.prototype.stop = function () {
 // --- Module methods
 // ----------------------------------------------------------------------------
 
-Tado.prototype.fetchJSONElement = function (instance) {
+Tado.prototype.createUserDevice = function(instance, user, index) {
+    var self = instance,
+        moduleName = "Tado",
+        langFile = self.controller.loadModuleLang(moduleName);
+    return self.controller.devices.create({
+        deviceId: "Tado_User" + index,
+        defaults: {
+            deviceType: "sensorBinary",
+            probeType: "general_purpose",
+            metrics: {
+                probeTitle: user.nickname,
+                icon: "door",
+                title: "Tado - Presence"
+            }
+        },
+        overlay: {
+            metrics: {
+                title: user.nickname
+            }
+        },
+        moduleId: this.id
+    })
+}
+
+Tado.prototype.getData = function (instance) {
     var self = instance,
         moduleName = "Tado",
         langFile = self.controller.loadModuleLang(moduleName);
@@ -99,9 +144,8 @@ Tado.prototype.fetchJSONElement = function (instance) {
         success: function (res) {
             try {
                 var json = JSON.parse(res.data);
-                deviceType = "sensorMultilevel";
-                level = parseFloat(json.insideTemp);
-                self.vDevs["insideTemp"].set("metrics:level", level);
+                self.vDevs["insideTemp"].set("metrics:level", parseFloat(json.insideTemp));
+                self.vDevs["setPointTemp"].set("metrics:level", parseFloat(json.setPointTemp));
             } catch (e) {
                 if (self.config.debug) {
                     self.controller.addNotification("error", langFile.err_parse, "module", moduleName);
@@ -111,7 +155,34 @@ Tado.prototype.fetchJSONElement = function (instance) {
         error: function () {
             if (self.config.debug) {
                 self.controller.addNotification("error", langFile.err_fetch, "module", moduleName);
-                console.log("URL: ", stateURL);
+            }
+        }
+    });
+    usersURL = TADO_USERS_URL + "?username=" + self.config.username + "&password=" + self.config.password
+    http.request({
+        url: usersURL,
+        async: true,
+        contentType: "text/json",
+        timeout: 10000,
+        success: function (res) {
+            try {
+                var json = JSON.parse(res.data);
+                for(n in json.appUsers) {
+                    user = json.appUsers[n];
+                    if( !("presence" + user.username in self.vDevs) ) {
+                        self.vDevs["presence" + user.username] = self.createUserDevice(self, user, n);
+                    }
+                    self.vDevs["presence" + user.username].set("metrics:level", user.relativePosition > json.geoMapScale["100"] ? "off" : "on");
+                }
+            } catch (e) {
+                if (self.config.debug) {
+                    self.controller.addNotification("error", langFile.err_parse, "module", moduleName);
+                }
+            }
+        },
+        error: function () {
+            if (self.config.debug) {
+                self.controller.addNotification("error", langFile.err_fetch, "module", moduleName);
             }
         }
     });
