@@ -8,7 +8,7 @@ It also makes no assumptions as to the rate limiting, etc that may occur - use t
 
 ## Configuration
 
-In the configuration screen the user has to specify the following parameters.  NOTE that the intention is to make these parameters more specific to Tado in the near future.  Watch this space!
+In the configuration screen the user has to specify the following parameters.
 
 * Username/Password - the access details for your Tado account
 * Device refresh (minutes) - How regularly to grab the data from the Tado API
