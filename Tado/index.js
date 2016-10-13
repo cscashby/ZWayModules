@@ -84,7 +84,7 @@ Tado.prototype.fetchJSONElement = function (instance) {
         console.log("password: XXX");
     }
 
-    stateURL = TADO_STATE_URL + "?username" + self.config.username + "&password=" + self.config.password
+    stateURL = TADO_STATE_URL + "?username=" + self.config.username + "&password=" + self.config.password
     http.request({
         url: stateURL,
         async: true,
