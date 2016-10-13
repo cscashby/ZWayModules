@@ -1,6 +1,8 @@
 #Tado
 
-The module connects to the Tado API (documented in various locations around the web.  Note that it currently uses the current 1.9 version of the API.  There are no obvious signs that this will be deprecated in the near future, but the author cannot guarantee this.
+The module connects to the Tado API (see References below).
+
+Note that it currently uses the current 1.9 version of the API.  There are no obvious signs that this will be deprecated in the near future, but the author cannot guarantee this.
 
 It also makes no assumptions as to the rate limiting, etc that may occur - use this module at your own risk! 
 
