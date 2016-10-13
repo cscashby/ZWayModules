@@ -78,7 +78,7 @@ Tado.prototype.stop = function () {
 Tado.prototype.fetchJSONElement = function (instance) {
     var self = instance,
         moduleName = "Tado",
-        langFile = self.controller.loadModuleLang(moduleName),
+        langFile = self.controller.loadModuleLang(moduleName);
     if (self.config.debug) {
         console.log("username: ", self.config.username);
         console.log("password: XXX");
