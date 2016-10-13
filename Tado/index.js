@@ -36,22 +36,26 @@ Tado.prototype.init = function (config) {
 
     var self = this;
 
-    this.vDev = self.controller.devices.create({
-        deviceId: "Tado_" + this.id,
-        defaults: {
-            deviceType: "sensorMultilevel",
-            metrics: {
-                probeTitle: this.config.probeTitle
-            }
-        },
-        overlay: {
-            metrics: {
-                scaleTitle: this.config.scaleTitle,
-                title: this.config.deviceName
-            }
-        },
-        moduleId: this.id
-    });
+    this.vDevs = {
+        "insideTemp": self.controller.devices.create({
+            deviceId: "Tado_InsideTemp" + this.id,
+            defaults: {
+                deviceType: "sensorMultilevel",
+                metrics: {
+                    probeTitle: "Inside Temp",
+                    icon: "temperature",
+                    title: "Tado"
+                }
+            },
+            overlay: {
+                metrics: {
+                    scaleTitle: "C",
+                    title: "Inside Temp"
+                }
+            },
+            moduleId: this.id
+        })
+    };
 
     this.timer = setInterval(function () {
         self.fetchJSONElement(self);
@@ -66,8 +70,10 @@ Tado.prototype.stop = function () {
         clearInterval(this.timer);
 
     if (this.vDev) {
-        this.controller.devices.remove(this.vDev.id);
-        this.vDev = null;
+        for (x in this.vDevs) {
+            this.controller.devices.remove(this.vDevs[x].id);
+        }
+        this.vDevs = null;
     }
 };
 
@@ -93,14 +99,9 @@ Tado.prototype.fetchJSONElement = function (instance) {
         success: function (res) {
             try {
                 var json = JSON.parse(res.data);
-                if (self.config.debug) {
-                    for (i in json) {
-                        console.log("key: ", i);
-                    }
-                }
-                //deviceType = "sensorMultilevel";
-                //level = parseFloat(eval("json." + self.config.jsonPath));
-                //self.vDev.set("metrics:level", level);
+                deviceType = "sensorMultilevel";
+                level = parseFloat(json.insideTemp);
+                self.vDevs["insideTemp"].set("metrics:level", level);
             } catch (e) {
                 if (self.config.debug) {
                     self.controller.addNotification("error", langFile.err_parse, "module", moduleName);
