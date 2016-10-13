@@ -1,12 +1,12 @@
 {
     "dependencies": [],
     "singleton": false,
-    "category": "developers_stuff",
-    "author": "Christian Ashby (click for Recipe)",
-    "homepage": "TODO (http://forum.z-wave.me/viewtopic.php?f=3424&t=21446)",
+    "category": "support_external_dev",
+    "author": "Christian Ashby",
+    "homepage": "https://github.com/cscashby/ZWayModules/tree/master/Tado",
     "icon": "icon.png",
     "moduleName": "Tado",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "maturity": "development",
     "repository": {
         "type": "git",
