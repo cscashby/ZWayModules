@@ -1,13 +1,14 @@
 /*** Tado Z-Way HA module *******************************************
 
-Version: 0.0.1
+Version: 0.2.3
 (c) Christian Ashby, 2016
 -----------------------------------------------------------------------------
 Author: Christian Ashby's device mapping for Tado heating controllers
 Derived from JSONDevice which was created from the
 XMLDevice module by Serguei Poltorak <ps@z-wave.me>
 Description:
-This module creates a sensorMultilevel or a sensorBinary widget
+This module creates a number of sensorMultilevel and sensorBinary virtual devices corresponding
+to temperature settings of the Tado thermostat device, and for each user's presence
 
  ******************************************************************************/
 
@@ -90,7 +91,7 @@ Tado.prototype.stop = function () {
     if (this.timer)
         clearInterval(this.timer);
 
-    if (this.vDev) {
+    if (this.vDevs) {
         for (x in this.vDevs) {
             this.controller.devices.remove(this.vDevs[x].id);
         }
