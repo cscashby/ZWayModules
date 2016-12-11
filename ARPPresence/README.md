@@ -1,5 +1,7 @@
 #ARPPresence
 
+ABORTED - not reliable enough on certain Android phones. I may pick this up again in the future!
+
 The module provides a presence device for a MAC address and therefore understand whether a given user is present or not.
 
 Note that due to limitations of the Linux Kernel, it requires that the user has sudo access (edit /etc/sudoers) for the arping command.
