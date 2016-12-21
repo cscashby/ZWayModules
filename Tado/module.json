@@ -8,6 +8,7 @@
     "moduleName": "Tado",
     "version": "0.2.3",
     "maturity": "development",
+    "dependencies" : [ "BaseModule" ],
     "repository": {
         "type": "git",
         "source": "https://github.com/cscashby/ZWayModules"
