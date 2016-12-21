@@ -6,8 +6,8 @@
     "homepage": "https://github.com/cscashby/ZWayModules/tree/master/Tado",
     "icon": "icon.png",
     "moduleName": "Tado",
-    "version": "0.2.3",
-    "maturity": "development",
+    "version": "1.0.0",
+    "maturity": "beta",
     "dependencies" : [ "BaseModule" ],
     "repository": {
         "type": "git",
