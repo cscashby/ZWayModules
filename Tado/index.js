@@ -137,54 +137,58 @@ Tado.prototype.getData = function (instance) {
     }
 
     stateURL = TADO_STATE_URL + "?username=" + self.config.username + "&password=" + self.config.password
-    http.request({
-        url: stateURL,
-        async: true,
-        contentType: "text/json",
-        timeout: 10000,
-        success: function (res) {
-            try {
-                var json = JSON.parse(res.data);
-                self.vDevs["insideTemp"].set("metrics:level", parseFloat(json.insideTemp));
-                self.vDevs["setPointTemp"].set("metrics:level", parseFloat(json.setPointTemp));
-            } catch (e) {
-                if (self.config.debug) {
-                    self.controller.addNotification("error", langFile.err_parse, "module", moduleName);
-                }
-            }
-        },
-        error: function () {
-            if (self.config.debug) {
-                self.controller.addNotification("error", langFile.err_fetch, "module", moduleName);
-            }
-        }
-    });
+    setTimeout(function() {
+	    http.request({
+	        url: stateURL,
+	        async: true,
+	        contentType: "text/json",
+	        timeout: 10000,
+	        success: function (res) {
+	            try {
+	                var json = JSON.parse(res.data);
+	                self.vDevs["insideTemp"].set("metrics:level", parseFloat(json.insideTemp));
+	                self.vDevs["setPointTemp"].set("metrics:level", parseFloat(json.setPointTemp));
+	            } catch (e) {
+	                if (self.config.debug) {
+	                    self.controller.addNotification("error", langFile.err_parse, "module", moduleName);
+	                }
+	            }
+	        },
+	        error: function () {
+	            if (self.config.debug) {
+	                self.controller.addNotification("error", langFile.err_fetch, "module", moduleName);
+	            }
+	        }
+	    });
+	}, 500);
     usersURL = TADO_USERS_URL + "?username=" + self.config.username + "&password=" + self.config.password
-    http.request({
-        url: usersURL,
-        async: true,
-        contentType: "text/json",
-        timeout: 10000,
-        success: function (res) {
-            try {
-                var json = JSON.parse(res.data);
-                for(n in json.appUsers) {
-                    user = json.appUsers[n];
-                    if( !("presence" + user.username in self.vDevs) ) {
-                        self.vDevs["presence" + user.username] = self.createUserDevice(self, user, n);
-                    }
-                    self.vDevs["presence" + user.username].set("metrics:level", user.relativePosition > json.geoMapScale["100"] ? "off" : "on");
-                }
-            } catch (e) {
-                if (self.config.debug) {
-                    self.controller.addNotification("error", langFile.err_parse, "module", moduleName);
-                }
-            }
-        },
-        error: function () {
-            if (self.config.debug) {
-                self.controller.addNotification("error", langFile.err_fetch, "module", moduleName);
-            }
-        }
-    });
+	setTimeout(function() {
+	    http.request({
+	        url: usersURL,
+	        async: true,
+	        contentType: "text/json",
+	        timeout: 10000,
+	        success: function (res) {
+	            try {
+	                var json = JSON.parse(res.data);
+	                for(n in json.appUsers) {
+	                    user = json.appUsers[n];
+	                    if( !("presence" + user.username in self.vDevs) ) {
+	                        self.vDevs["presence" + user.username] = self.createUserDevice(self, user, n);
+	                    }
+	                    self.vDevs["presence" + user.username].set("metrics:level", user.relativePosition > json.geoMapScale["100"] ? "off" : "on");
+	                }
+	            } catch (e) {
+	                if (self.config.debug) {
+	                    self.controller.addNotification("error", langFile.err_parse, "module", moduleName);
+	                }
+	            }
+	        },
+	        error: function () {
+	            if (self.config.debug) {
+	                self.controller.addNotification("error", langFile.err_fetch, "module", moduleName);
+	            }
+	        }
+	    });
+	}, 500);
 };
