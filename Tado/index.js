@@ -137,6 +137,9 @@ Tado.prototype.getData = function (instance) {
     }
 
     stateURL = TADO_STATE_URL + "?username=" + self.config.username + "&password=" + self.config.password
+	if (self.config.debug) {
+		console.log("State URL: ", stateURL);
+	}
     setTimeout(function() {
 	    http.request({
 	        url: stateURL,
@@ -162,6 +165,9 @@ Tado.prototype.getData = function (instance) {
 	    });
 	}, 500);
     usersURL = TADO_USERS_URL + "?username=" + self.config.username + "&password=" + self.config.password
+	if (self.config.debug) {
+		console.log("Users URL: ", usersURL);
+	}
 	setTimeout(function() {
 	    http.request({
 	        url: usersURL,
